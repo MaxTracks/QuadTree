@@ -1,7 +1,7 @@
 #include "quadtree.h"
 
 template<class T>
-quadtree::~quadtree()
+quadtree<T>::~quadtree()
 {
   destroy(root);
   delete root;
@@ -10,9 +10,9 @@ quadtree::~quadtree()
 template <class T>
 void quadtree<T>::insert(std::pair<double,T> item)
 {
-  node<T>* nn = new node(item);
+  node<T>* nn = new node<T>(item);
 
-  if(root == nullptr))
+  if(root == nullptr)
   {
     root = nn;
   } else {
@@ -48,7 +48,7 @@ void quadtree<T>::insert(std::pair<double,T> item)
 }
 
 template<class T>
-void quadtree::destroy(node<T>* nd)
+void quadtree<T>::destroy(node<T>* nd)
 {
   if(nd->first != nullptr)
   {
