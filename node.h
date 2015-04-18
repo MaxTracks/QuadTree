@@ -2,16 +2,17 @@
 #define NODE_H_
 
 template<class T>
-struct node
+class node
 {
   node* first;
   node* second;
   node* third;
   node* fourth;
 
-  T* data;
-  node():first(nullptr),second(nullptr),
-    third(nullptr),fourth(nullptr),data(nullptr){}
+  std::pair<double,T> data;
+
+  node():first(nullptr),second(nullptr),third(nullptr),fourth(nullptr){}
+  node(std::pair<double,T> item):first(nullptr),second(nullptr),third(nullptr),fourth(nullptr),data(item){}
 };
 
 

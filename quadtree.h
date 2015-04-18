@@ -5,16 +5,19 @@
 #include <utility>
 #include <algorithm>
 #include <cmath>
+#include "node.h"
 
 template <class T>
 class quadtree
 {
  public:
-  heap():currentSize(0){}
-  void insert(T item);
+  quadtree():currentSize(0){}
+  ~quadtree();
+  destroy(node *nd);
+  void insert(std::pair<double,T> item);
   unsigned int size(){return currentSize;}
   template <class U>
-  friend std::ostream& operator<<(std::ostream &out,heap<U> &hp);
+  friend std::ostream& operator<<(std::ostream &out,quadtree<U> &hp);
   
  private:
   unsigned int currentSize;
