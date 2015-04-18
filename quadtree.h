@@ -13,7 +13,7 @@ class quadtree
  public:
   quadtree():currentSize(0){}
   ~quadtree();
-  destroy(node *nd);
+  void destroy(node<T>* nd);
   void insert(std::pair<double,T> item);
   unsigned int size(){return currentSize;}
   template <class U>
@@ -21,7 +21,7 @@ class quadtree
   
  private:
   unsigned int currentSize;
-  node* root;
+  node<T>* root;
 };
 
 #include "quadtree.cpp"

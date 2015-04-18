@@ -10,13 +10,13 @@ quadtree::~quadtree()
 template <class T>
 void quadtree<T>::insert(std::pair<double,T> item)
 {
-  node *nn = new node(item);
+  node<T>* nn = new node(item);
 
   if(root == nullptr))
   {
     root = nn;
   } else {
-    node* tmp = root;
+    node<T>* tmp = root;
 
     //figure out which quadrent to focus
     //while(1)
@@ -48,7 +48,7 @@ void quadtree<T>::insert(std::pair<double,T> item)
 }
 
 template<class T>
-void quadtree::destroy(node *nd)
+void quadtree::destroy(node<T>* nd)
 {
   if(nd->first != nullptr)
   {
