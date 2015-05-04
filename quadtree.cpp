@@ -8,15 +8,22 @@ quadtree<T>::~quadtree()
 }
 
 template <class T>
-void quadtree<T>::insert(std::pair<double,T> item)
+void quadtree<T>::insert(std::pair<double,double> location,T item)
 {
-  node<T>* nn = new node<T>(item);
-
   if(root == nullptr)
   {
+    node<T> *nn = new node<T>();
+    std::pair<std::pair<double,double>,T> data;
+    data.first = location;
+    data.second = item;
+    nn->object.add_back(data);
     root = nn;
   } else {
     node<T>* tmp = root;
+
+    //if leaf add
+    //
+    //else determine quedrent to access 
 
     //figure out which quadrent to focus
     //while(1)
@@ -76,7 +83,7 @@ void quadtree<T>::destroy(node<T>* nd)
 }
 
 template <class U>
-std::ostream& operator<<(std::ostream &out,quadtree<U> &hp)
+std::ostream& operator<<(std::ostream &out,quadtree<U> &qt)
 {
 
   return out;

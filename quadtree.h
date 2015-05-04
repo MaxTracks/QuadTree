@@ -11,17 +11,16 @@ template <class T>
 class quadtree
 {
  public:
-  quadtree():currentSize(0){}
+  quadtree(unsigned int bukkitSize = 1):bucketSize(bukkitSize){}
   ~quadtree();
   void destroy(node<T>* nd);
   void insert(std::pair<double,T> item);
-  unsigned int size(){return currentSize;}
   template <class U>
   friend std::ostream& operator<<(std::ostream &out,quadtree<U> &hp);
   
  private:
-  unsigned int currentSize;
-  node<T>* root;
+  unsigned int bucketSize;
+  node<T> *root;
 };
 
 #include "quadtree.cpp"
