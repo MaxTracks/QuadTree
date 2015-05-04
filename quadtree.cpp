@@ -65,6 +65,31 @@ void quadtree<T>::insert(node<T> *nd,std::pair<double,double> location,T item)
 	}
 }
 
+template <class T>
+void quadtree<T>::split(node<T> *nd)
+{
+  nd->first = new node<T>();
+  nd->second = new node<T>();
+  nd->third = new node<T>();
+  nd->fourth = new node<T>();
+
+  nd->first->x.first = nd->x.first;
+  nd->first->x.second = (nd->x.second + nd->x.first)/2;
+  nd->first->y.first = nd->y.first;
+  nd->first->y.second = (nd->y.second + nd->y.first)/2;
+
+  nd->second->x.first = (nd->x.second + nd->x.first)/2;
+  nd->secdon->x.second = nd->x.second;
+
+  for(auto i:objects)
+  {
+    insert(nd,i.first,i.second);
+  }
+
+  nd->object.clear();
+  
+}
+
 template<class T>
 void quadtree<T>::destroy(node<T> *nd)
 {
