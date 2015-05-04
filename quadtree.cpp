@@ -17,45 +17,23 @@ void quadtree<T>::insert(std::pair<double,double> location,T item)
     data.first = location;
     data.second = item;
     nn->object.add_back(data);
+    nn->x.first = std::numeric_limits<double>::min();
+    nn->x.second = std::numeric_limits<double>::max();
+    nn->y.first = std::numeric_limits<double>::min();
+    nn->y.second = std::numeric_limits<double>::max();
     root = nn;
   } else {
     node<T>* tmp = root;
 
-    //if leaf add
-    //
+    //if leaf check bucketSize
+    //  if less than bucketsize add
+    //  else split and insert
     //else determine quedrent to access 
-
-    //figure out which quadrent to focus
-    //while(1)
-    //{
-    //  if(tmp->first == nullptr 
-    //   && tmp->second == nullptr 
-    //   && tmp->third == nullptr 
-    //   && tmp->fourth == nullptr) 
-    //  {
-    //   tmp = nn; 
-    //   return; 
-    //  }
-    //  
-    //  if()
-    //  {
-    //   tmp = tmp->first;
-    //  } else if ()
-    //  {
-    //    tmp = tmp->second;
-    //  } else if()
-    //  {
-    //    tmp = tmp->third;
-    //  } else 
-    //  {
-    //   tmp = tmp->fourth;
-    //  }
-    //}
   }
 }
 
 template<class T>
-void quadtree<T>::destroy(node<T>* nd)
+void quadtree<T>::destroy(node<T> *nd)
 {
   if(nd->first != nullptr)
   {
@@ -81,6 +59,30 @@ void quadtree<T>::destroy(node<T>* nd)
     delete nd->fourth;
   }
 }
+
+template <class T>
+void quadtree<T>::inOrder()
+{
+  inOrder(root);
+}
+
+template <class T>
+void quadtree<T>::inOrder(node<T> *nd)
+{
+  if(nd == nullptr) return;
+
+  for(auto i:nd->objects)
+  {
+    std::cout << i.second << std::endl;
+  }
+
+  inOrder(nd->first);
+  inOrder(nd->second);
+  inOrder(nd->third);
+  inOrder(nd->fourth);
+}
+
+
 
 template <class U>
 std::ostream& operator<<(std::ostream &out,quadtree<U> &qt)
