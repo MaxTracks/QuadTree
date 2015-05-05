@@ -8,13 +8,13 @@ int main()
   generator gen(-1000000,1000000);
   generator mult(1,5);
 
-  quadtree<int> qt;
+  quadtree<double> qt;
 
-  for(int i=0;i<10000;i++)
+/*  for(int i=0;i<10000;i++)
   {
     vec.push_back(double(gen()) / (double(mult()) * 10.0));
   }
-
+*/
   
 
   return 0;

@@ -3,8 +3,8 @@
 template<class T>
 quadtree<T>::~quadtree()
 {
-  destroy(root);
-  delete root;
+	if(root != nullptr) destroy(root);
+
 }
 
 template <class T>
@@ -22,7 +22,9 @@ void quadtree<T>::insert(std::pair<double,double> location,T item)
     nn->y.first = std::numeric_limits<double>::min();
     nn->y.second = std::numeric_limits<double>::max();
     root = nn;
-	} else {
+	}
+	else
+	{
 		insert(root, location, item);
 	}
 }
@@ -40,9 +42,9 @@ void quadtree<T>::insert(node<T> *nd,std::pair<double,double> location,T item)
 			nd->object.push_back(std::pair<std::pair<double,double>, T>(location,item));
 		}
   } else {
-		if(location.first <= ((x.first + x.second)/2))
+		if(location.first <= ((nd->x.first + nd->x.second)/2))
 		{
-			if(location.second <= ((y.first + y.second)/2))
+			if(location.second <= ((nd->y.first + nd->y.second)/2))
 			{
 				insert(nd->first, location, item);
 			}
@@ -53,7 +55,7 @@ void quadtree<T>::insert(node<T> *nd,std::pair<double,double> location,T item)
 		}
 		else
 		{
-			if(location.second <= ((y.first + y.second)/2))
+			if(location.second <= ((nd->y.first + nd->y.second)/2))
 			{
 				insert(nd->second, location, item);
 			}
@@ -68,29 +70,14 @@ void quadtree<T>::insert(node<T> *nd,std::pair<double,double> location,T item)
 template<class T>
 void quadtree<T>::destroy(node<T> *nd)
 {
-  if(nd->first != nullptr)
-  {
-    destroy(nd->first);
-    delete nd->first;
-  }
-
-  if(nd->second != nullptr)
-  {
-    destroy(nd->second);
-    delete nd->second;
-  }
-
-  if(nd->third != nullptr)
-  {
-    destroy(nd->third);
-    delete nd->third;
-  }
-
-  if(nd->fourth != nullptr)
-  {
-    destroy(nd->fourth);
-    delete nd->fourth;
-  }
+	if(nd != nullptr)
+	{
+		destroy(nd->first);
+		destroy(nd->second);
+		destroy(nd->third);
+		destroy(nd->fourth);
+		delete nd;
+	}
 }
 
 template <class T>
@@ -114,8 +101,6 @@ void quadtree<T>::inOrder(node<T> *nd)
   inOrder(nd->third);
   inOrder(nd->fourth);
 }
-
-
 
 template <class U>
 std::ostream& operator<<(std::ostream &out,quadtree<U> &qt)
