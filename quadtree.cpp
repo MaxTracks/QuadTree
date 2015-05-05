@@ -17,9 +17,9 @@ void quadtree<T>::insert(std::pair<double,double> location,T item)
     data.first = location;
     data.second = item;
     nn->objects.push_back(data);
-    nn->x.first = std::numeric_limits<double>::min();
+    nn->x.first = std::numeric_limits<double>::lowest();
     nn->x.second = std::numeric_limits<double>::max();
-    nn->y.first = std::numeric_limits<double>::min();
+    nn->y.first = std::numeric_limits<double>::lowest();
     nn->y.second = std::numeric_limits<double>::max();
     root = nn;
 	}
