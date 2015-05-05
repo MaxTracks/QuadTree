@@ -10,6 +10,13 @@ int main()
 
   quadtree<double> qt;
 
+  qt.insert(std::pair<double,double>(-1.0,1.0),999.99);  
+  qt.insert(std::pair<double,double>(-1.0,-1.0),999.98);  
+  qt.insert(std::pair<double,double>(1.0,1.0),999.97);  
+  qt.insert(std::pair<double,double>(1.0,-1.0),999.96);  
+
+  qt.inOrder();
+
 /*  for(int i=0;i<10000;i++)
   {
     vec.push_back(double(gen()) / (double(mult()) * 10.0));

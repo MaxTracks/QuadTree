@@ -16,7 +16,7 @@ void quadtree<T>::insert(std::pair<double,double> location,T item)
     std::pair<std::pair<double,double>,T> data;
     data.first = location;
     data.second = item;
-    nn->object.add_back(data);
+    nn->objects.push_back(data);
     nn->x.first = std::numeric_limits<double>::min();
     nn->x.second = std::numeric_limits<double>::max();
     nn->y.first = std::numeric_limits<double>::min();
@@ -34,12 +34,12 @@ void quadtree<T>::insert(node<T> *nd,std::pair<double,double> location,T item)
 {
 	if(nd->first == nullptr)
 	{
-		if(bucketSize == nd->object.size())
+		if(bucketSize == nd->objects.size())
 		{
-			split();
+			split(nd);
 			insert(nd, location, item);
 		} else {
-			nd->object.push_back(std::pair<std::pair<double,double>, T>(location,item));
+			nd->objects.push_back(std::pair<std::pair<double,double>, T>(location,item));
 		}
   } else {
 		if(location.first <= ((nd->x.first + nd->x.second)/2))
@@ -100,7 +100,7 @@ void quadtree<T>::split(node<T> *nd)
     insert(nd,i.first,i.second);
   }
 
-  nd->object.clear();
+  nd->objects.clear();
   
 }
 
