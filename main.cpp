@@ -14,15 +14,13 @@ int main()
   qt.insert(std::pair<double,double>(-1.0,-1.0),999.98);  
   qt.insert(std::pair<double,double>(1.0,1.0),999.97);  
   qt.insert(std::pair<double,double>(1.0,-1.0),999.96);  
+	qt.insert(std::pair<double,double>(-0.4,0.4),999.95);
+//	qt.insert(std::pair<double,double>(-0.4,-0.4),999.94);
+	qt.insert(std::pair<double,double>(0.4,0.4),999.93);
+	qt.insert(std::pair<double,double>(0.4,-0.4),999.92);
+
 
   qt.inOrder();
-
-/*  for(int i=0;i<10000;i++)
-  {
-    vec.push_back(double(gen()) / (double(mult()) * 10.0));
-  }
-*/
-  
 
   return 0;
 }
