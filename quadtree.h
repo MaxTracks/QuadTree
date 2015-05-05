@@ -23,6 +23,7 @@ class quadtree
  private:
   void split(node<T> *nd);
   void inOrder(node<T> *nd);
+	void insert(node<T> *nd, std::pair<double,double> location,T item);
 
   unsigned int bucketSize;
   node<T> *root;

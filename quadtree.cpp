@@ -10,8 +10,8 @@ quadtree<T>::~quadtree()
 template <class T>
 void quadtree<T>::insert(std::pair<double,double> location,T item)
 {
-  if(root == nullptr)
-  {
+	if(root == nullptr)
+	{
     node<T> *nn = new node<T>();
     std::pair<std::pair<double,double>,T> data;
     data.first = location;
@@ -22,14 +22,47 @@ void quadtree<T>::insert(std::pair<double,double> location,T item)
     nn->y.first = std::numeric_limits<double>::min();
     nn->y.second = std::numeric_limits<double>::max();
     root = nn;
-  } else {
-    node<T>* tmp = root;
+	} else {
+		insert(root, location, item);
+	}
+}
 
-    //if leaf check bucketSize
-    //  if less than bucketsize add
-    //  else split and insert
-    //else determine quedrent to access 
-  }
+template <class T>
+void quadtree<T>::insert(node<T> *nd,std::pair<double,double> location,T item)
+{
+	if(nd->first == nullptr)
+	{
+		if(bucketSize == nd->object.size())
+		{
+			split();
+			insert(nd, location, item);
+		} else {
+			nd->object.push_back(std::pair<std::pair<double,double>, T>(location,item));
+		}
+  } else {
+		if(location.first <= ((x.first + x.second)/2))
+		{
+			if(location.second <= ((y.first + y.second)/2))
+			{
+				insert(nd->first, location, item);
+			}
+			else
+			{
+				insert(nd->third, location, item);
+			}
+		}
+		else
+		{
+			if(location.second <= ((y.first + y.second)/2))
+			{
+				insert(nd->second, location, item);
+			}
+			else
+			{
+				insert(nd->fourth, location, item);
+			}
+		}
+	}
 }
 
 template<class T>
