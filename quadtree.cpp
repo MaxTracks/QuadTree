@@ -81,9 +81,21 @@ void quadtree<T>::split(node<T> *nd)
   nd->first->y.second = (nd->y.second + nd->y.first)/2;
 
   nd->second->x.first = (nd->x.second + nd->x.first)/2;
-  nd->secdon->x.second = nd->x.second;
+  nd->second->x.second = nd->x.second;
+  nd->second->y.first = nd->y.first;
+  nd->second->y.second = (nd->y.second + nd->y.first)/2;
 
-  for(auto i:objects)
+  nd->third->x.first = nd->x.first;
+  nd->third->x.second = (nd->x.second + nd->x.first)/2;
+  nd->third->y.first = (nd->x.second + nd->x.first)/2;
+  nd->third->y.second = nd->y.second;
+
+  nd->third->x.first = (nd->x.first + nd->x.second)/2;
+  nd->third->x.second = nd->x.second;
+  nd->fourth->y.first = (nd->x.second + nd->x.first)/2;
+  nd->fourth->y.second = nd->y.second;
+
+  for(auto i:nd->objects)
   {
     insert(nd,i.first,i.second);
   }
