@@ -12,7 +12,7 @@ template <class T>
 class quadtree
 {
  public:
-  quadtree(unsigned int bukkitSize = 1):bucketSize(bukkitSize){};
+  quadtree(unsigned int bukkitSize = 1):bucketSize(bukkitSize),root(nullptr){};
   ~quadtree();
   void destroy(node<T>* nd);
   void inOrder();

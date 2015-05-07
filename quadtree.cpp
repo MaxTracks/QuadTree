@@ -17,10 +17,17 @@ void quadtree<T>::insert(std::pair<double,double> location,T item)
     data.first = location;
     data.second = item;
     nn->objects.push_back(data);
-    nn->x.first = std::numeric_limits<double>::lowest();
+
+/*    nn->x.first = std::numeric_limits<double>::lowest();
     nn->x.second = std::numeric_limits<double>::max();
     nn->y.first = std::numeric_limits<double>::lowest();
     nn->y.second = std::numeric_limits<double>::max();
+*/
+		nn->x.first = 0.0;
+    nn->x.second = 100.0;
+    nn->y.first = 0.0;
+    nn->y.second = 100.0;
+
     root = nn;
 	}
 	else
@@ -39,12 +46,14 @@ void quadtree<T>::insert(node<T> *nd,std::pair<double,double> location,T item)
 			split(nd);
 			insert(nd, location, item);
 		} else {
-			nd->objects.push_back(std::pair<std::pair<double,double>, T>(location,item));
+			std::pair<std::pair<double, double>, T> tmp;
+			tmp = make_pair(location, item);
+			nd->objects.push_back(tmp);
 		}
   } else {
-		if(location.first <= ((nd->x.first + nd->x.second)/2))
+		if(location.first <= ((nd->x.first + nd->x.second)/2.0))
 		{
-			if(location.second <= ((nd->y.first + nd->y.second)/2))
+			if(location.second <= ((nd->y.first + nd->y.second)/2.0))
 			{
 				insert(nd->first, location, item);
 			}
@@ -55,7 +64,7 @@ void quadtree<T>::insert(node<T> *nd,std::pair<double,double> location,T item)
 		}
 		else
 		{
-			if(location.second <= ((nd->y.first + nd->y.second)/2))
+			if(location.second <= ((nd->y.first + nd->y.second)/2.0))
 			{
 				insert(nd->second, location, item);
 			}
@@ -76,23 +85,23 @@ void quadtree<T>::split(node<T> *nd)
   nd->fourth = new node<T>();
 
   nd->first->x.first = nd->x.first;
-  nd->first->x.second = (nd->x.second + nd->x.first)/2;
+  nd->first->x.second = (nd->x.second + nd->x.first)/2.0;
   nd->first->y.first = nd->y.first;
-  nd->first->y.second = (nd->y.second + nd->y.first)/2;
+  nd->first->y.second = (nd->y.second + nd->y.first)/2.0;
 
-  nd->second->x.first = (nd->x.second + nd->x.first)/2;
+  nd->second->x.first = (nd->x.second + nd->x.first)/2.0;
   nd->second->x.second = nd->x.second;
   nd->second->y.first = nd->y.first;
-  nd->second->y.second = (nd->y.second + nd->y.first)/2;
+  nd->second->y.second = (nd->y.second + nd->y.first)/2.0;
 
   nd->third->x.first = nd->x.first;
-  nd->third->x.second = (nd->x.second + nd->x.first)/2;
-  nd->third->y.first = (nd->x.second + nd->x.first)/2;
+  nd->third->x.second = (nd->x.second + nd->x.first)/2.0;
+  nd->third->y.first = (nd->x.second + nd->x.first)/2.0;
   nd->third->y.second = nd->y.second;
 
-  nd->third->x.first = (nd->x.first + nd->x.second)/2;
+  nd->third->x.first = (nd->x.first + nd->x.second)/2.0;
   nd->third->x.second = nd->x.second;
-  nd->fourth->y.first = (nd->x.second + nd->x.first)/2;
+  nd->fourth->y.first = (nd->x.second + nd->x.first)/2.0;
   nd->fourth->y.second = nd->y.second;
 
   for(auto i:nd->objects)
