@@ -4,7 +4,6 @@ template<class T>
 quadtree<T>::~quadtree()
 {
 	if(root != nullptr) destroy(root);
-
 }
 
 template <class T>
@@ -47,7 +46,9 @@ void quadtree<T>::insert(node<T> *nd,std::pair<double,double> location,T item)
 			insert(nd, location, item);
 		} else {
 			std::pair<std::pair<double, double>, T> tmp;
-			tmp = make_pair(location, item);
+			tmp.first.first = location.first;
+      tmp.first.second = location.second;
+      tmp.second = item;
 			nd->objects.push_back(tmp);
 		}
   } else {
@@ -79,6 +80,8 @@ void quadtree<T>::insert(node<T> *nd,std::pair<double,double> location,T item)
 template <class T>
 void quadtree<T>::split(node<T> *nd)
 {
+  static unsigned int splitcount = 0;
+  std::cout << "split count: " << splitcount++ << std::endl;
   nd->first = new node<T>();
   nd->second = new node<T>();
   nd->third = new node<T>();
@@ -110,7 +113,6 @@ void quadtree<T>::split(node<T> *nd)
   }
 
   nd->objects.clear();
-  
 }
 
 template<class T>
@@ -148,9 +150,60 @@ void quadtree<T>::inOrder(node<T> *nd)
   inOrder(nd->fourth);
 }
 
+template <class T>
+bool quadtree<T>::deleteKey(std::pair<double,double> xy)
+{
+  if(root == nullptr) return false;
+  node<T> *tmp = root;
+
+  if(tmp->first != nullptr)
+  {
+    if(xy.first <= ((tmp->x.first + tmp->x.second)/2.0))
+    {
+      if(xy.second <= ((tmp->y.first + tmp->y.second)/2.0))
+      {
+        tmp = tmp->first;
+      }
+      else
+      {
+        tmp = tmp->third;
+      }
+    }
+    else
+    {
+      if(xy.second <= ((tmp->y.first + tmp->y.second)/2.0))
+      {
+        tmp = tmp->second;
+      }
+      else
+      {
+        tmp = tmp->fourth;
+      }
+    }
+  } else {
+    for(int i=0;i<tmp->objects.size();i++)
+    {
+      if(tmp->objects[i].first == xy) 
+      {
+        tmp->objects.erase(tmp->objects.begin() + i);
+        return true;
+      }
+    }
+  }
+
+  return false;
+}
+
+template <class T>
+std::vector<std::pair<std::pair<double,double>,T> > quadtree<T>::searchRange(std::pair<double,double> start,std::pair<double,double> end)
+{
+  
+
+}
+
 template <class U>
 std::ostream& operator<<(std::ostream &out,quadtree<U> &qt)
 {
-
+  qt.inOrder();
   return out;
 }

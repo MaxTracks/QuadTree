@@ -17,6 +17,9 @@ class quadtree
   void destroy(node<T>* nd);
   void inOrder();
   void insert(std::pair<double,double> location,T item);
+  bool deleteKey(std::pair<double,double> xy);
+  std::vector<std::pair<std::pair<double,double>,T> > searchRange(std::pair<double,double> start,
+      std::pair<double,double> end);
   template <class U>
   friend std::ostream& operator<<(std::ostream &out,quadtree<U> &hp);
   
