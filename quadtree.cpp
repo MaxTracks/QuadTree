@@ -9,6 +9,12 @@ quadtree<T>::~quadtree()
 template <class T>
 void quadtree<T>::insert(std::pair<double,double> location,T item)
 {
+  insert(root,location,item);
+}
+
+template <class T>
+void quadtree<T>::insert(node<T> *tmp, std::pair<double,double> location,T item)
+{
 	if(root == nullptr)
 	{
     node<T> *nn = new node<T>();
@@ -17,71 +23,62 @@ void quadtree<T>::insert(std::pair<double,double> location,T item)
     data.second = item;
     nn->objects.push_back(data);
 
-/*    nn->x.first = std::numeric_limits<double>::lowest();
+    nn->x.first = std::numeric_limits<double>::lowest();
     nn->x.second = std::numeric_limits<double>::max();
     nn->y.first = std::numeric_limits<double>::lowest();
     nn->y.second = std::numeric_limits<double>::max();
-*/
-		nn->x.first = 0.0;
-    nn->x.second = 100.0;
-    nn->y.first = 0.0;
-    nn->y.second = 100.0;
 
     root = nn;
 	}
 	else
 	{
-		insert(root, location, item);
-	}
-}
-
-template <class T>
-void quadtree<T>::insert(node<T> *nd,std::pair<double,double> location,T item)
-{
-	if(nd->first == nullptr)
-	{
-		if(bucketSize == nd->objects.size())
-		{
-			split(nd);
-			insert(nd, location, item);
-		} else {
-			std::pair<std::pair<double, double>, T> tmp;
-			tmp.first.first = location.first;
-      tmp.first.second = location.second;
-      tmp.second = item;
-			nd->objects.push_back(tmp);
-		}
-  } else {
-		if(location.first <= ((nd->x.first + nd->x.second)/2.0))
-		{
-			if(location.second <= ((nd->y.first + nd->y.second)/2.0))
-			{
-				insert(nd->first, location, item);
-			}
-			else
-			{
-				insert(nd->third, location, item);
-			}
-		}
-		else
-		{
-			if(location.second <= ((nd->y.first + nd->y.second)/2.0))
-			{
-				insert(nd->second, location, item);
-			}
-			else
-			{
-				insert(nd->fourth, location, item);
-			}
-		}
+    while(1)
+    {
+      if(tmp->first == nullptr)
+      {
+        if(bucketSize == tmp->objects.size())
+        {
+          if(collision(tmp,location))return;
+          split(tmp);
+        } else {
+          std::pair<std::pair<double, double>, T> tmppair;
+          tmppair.first.first = location.first;
+          tmppair.first.second = location.second;
+          tmppair.second = item;
+          tmp->objects.push_back(tmppair);
+          return;
+        }
+      } else {
+        if(location.first <= ((tmp->x.first + tmp->x.second)/2.0))
+        {
+          if(location.second <= ((tmp->y.first + tmp->y.second)/2.0))
+          {
+            tmp = tmp->first;
+          }
+          else
+          {
+            tmp = tmp->third;
+          }
+        }
+        else
+        {
+          if(location.second <= ((tmp->y.first + tmp->y.second)/2.0))
+          {
+            tmp = tmp->second;
+          }
+          else
+          {
+            tmp = tmp->fourth;
+          }
+        }
+      }    
+    }
 	}
 }
 
 template <class T>
 void quadtree<T>::split(node<T> *nd)
 {
-  static unsigned int splitcount = 0;
-  std::cout << "split count: " << splitcount++ << std::endl;
   nd->first = new node<T>();
   nd->second = new node<T>();
   nd->third = new node<T>();
@@ -97,14 +94,14 @@ void quadtree<T>::split(node<T> *nd)
   nd->second->y.first = nd->y.first;
   nd->second->y.second = (nd->y.second + nd->y.first)/2.0;
 
-  nd->third->x.first = nd->x.first;
-  nd->third->x.second = (nd->x.second + nd->x.first)/2.0;
-  nd->third->y.first = (nd->x.second + nd->x.first)/2.0;
+  nd->third->x.second = nd->x.first;
+  nd->third->x.first = (nd->x.second + nd->x.first)/2.0;
+  nd->third->y.first = (nd->y.second + nd->y.first)/2.0;
   nd->third->y.second = nd->y.second;
 
   nd->third->x.first = (nd->x.first + nd->x.second)/2.0;
   nd->third->x.second = nd->x.second;
-  nd->fourth->y.first = (nd->x.second + nd->x.first)/2.0;
+  nd->fourth->y.first = (nd->y.second + nd->y.first)/2.0;
   nd->fourth->y.second = nd->y.second;
 
   for(auto i:nd->objects)
@@ -198,7 +195,7 @@ template <class T>
 std::vector<std::pair<std::pair<double,double>,T> > quadtree<T>::searchRange(std::pair<double,double> start,std::pair<double,double> end)
 {
   
-
+  
 }
 
 template <class U>
@@ -206,4 +203,16 @@ std::ostream& operator<<(std::ostream &out,quadtree<U> &qt)
 {
   qt.inOrder();
   return out;
+}
+
+template <class T>
+bool quadtree<T>::collision(node<T> *nd,std::pair<double,double> location)
+{
+  for(int i=0;i<nd->objects.size();i++)
+  {
+    if(nd->objects[i].first.first == location.first 
+        && nd->objects[i].first.second == location.second) 
+      return true;
+  }
+  return false;
 }

@@ -24,9 +24,10 @@ class quadtree
   friend std::ostream& operator<<(std::ostream &out,quadtree<U> &hp);
   
  private:
+  bool collision(node<T> *nd,std::pair<double,double> location);
   void split(node<T> *nd);
   void inOrder(node<T> *nd);
-	void insert(node<T> *nd, std::pair<double,double> location,T item);
+  void insert(node<T> *tmp, std::pair<double,double> location, T item);
 
   unsigned int bucketSize;
   node<T> *root;
