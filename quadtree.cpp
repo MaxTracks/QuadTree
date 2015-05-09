@@ -201,22 +201,63 @@ template <class T>
 std::vector<std::pair<std::pair<double,double>,T> > quadtree<T>::searchRange(node<T> *nd,
     std::pair<double,double> start,std::pair<double,double> end)
 {
+  /*
+       public void query2D(Interval2D<Key> rect) {
+        query2D(root, rect);
+       }
+
+       private void query2D(Node h, Interval2D<Key> rect) {
+         if (h == null) return;
+         Key xmin = rect.intervalX.low;
+         Key ymin = rect.intervalY.low;
+         Key xmax = rect.intervalX.high;
+         Key ymax = rect.intervalY.high;
+         if (rect.contains(h.x, h.y))
+           System.out.println("    (" + h.x + ", " + h.y + ") " + h.value);
+         if ( less(xmin, h.x) &&  less(ymin, h.y)) query2D(h.SW, rect);
+         if ( less(xmin, h.x) && !less(ymax, h.y)) query2D(h.NW, rect);
+         if (!less(xmax, h.x) &&  less(ymin, h.y)) query2D(h.SE, rect);
+         if (!less(xmax, h.x) && !less(ymax, h.y)) query2D(h.NE, rect);
+       }
+  */
+
   std::vector<std::pair<std::pair<double,double>, T> > results;
   std::vector<std::pair<std::pair<double,double>, T> > quad;
  
   if(nd == nullptr) return results;
 
-  quad = searchRange(start,end);
-  results.insert(results.end(),quad.begin(),quad.end());
+  if(nd->first != nullptr)
+  {
+    if(nd->first->x.first < end.first && nd->first->x.second < start.first 
+        && nd->first->y.first < end.second && nd->first->y.second < start.second)
+    {
+      quad = searchRange(start,end);
+      results.insert(results.end(),quad.begin(),quad.end());
+    }
 
-  quad = searchRange(start,end);
-  results.insert(results.end(),quad.begin(),quad.end());
+    if(nd->second->x.first < end.first && nd->second->x.second < start.first 
+        && nd->second->y.first < end.second && nd->second->y.second < start.second)
+    {
+      quad = searchRange(start,end);
+      results.insert(results.end(),quad.begin(),quad.end());
+    }
 
-  quad = searchRange(start,end);
-  results.insert(results.end(),quad.begin(),quad.end());
+    if(nd->third->x.first < end.first && nd->third->x.second < start.first 
+        && nd->third->y.first < end.second && nd->third->y.second < start.second)
+    {
+      quad = searchRange(start,end);
+      results.insert(results.end(),quad.begin(),quad.end());
+    }
 
-  quad = searchRange(start,end);
-  results.insert(results.end(),quad.begin(),quad.end());
+    if(nd->fourth->x.first < end.first && nd->fourth->x.second < start.first 
+        && nd->fourth->y.first < end.second && nd->fourth->y.second < start.second)
+    {
+      quad = searchRange(start,end);
+      results.insert(results.end(),quad.begin(),quad.end());
+    }
+  } else {
+   return nd->objects; 
+  }
 
   return results;
 }
