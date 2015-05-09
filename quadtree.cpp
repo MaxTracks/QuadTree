@@ -194,8 +194,31 @@ bool quadtree<T>::deleteKey(std::pair<double,double> xy)
 template <class T>
 std::vector<std::pair<std::pair<double,double>,T> > quadtree<T>::searchRange(std::pair<double,double> start,std::pair<double,double> end)
 {
-  
-  
+  return searchRange(root,start,end);
+}
+
+template <class T>
+std::vector<std::pair<std::pair<double,double>,T> > quadtree<T>::searchRange(node<T> *nd,
+    std::pair<double,double> start,std::pair<double,double> end)
+{
+  std::vector<std::pair<std::pair<double,double>, T> > results;
+  std::vector<std::pair<std::pair<double,double>, T> > quad;
+ 
+  if(nd == nullptr) return results;
+
+  quad = searchRange(start,end);
+  results.insert(results.end(),quad.begin(),quad.end());
+
+  quad = searchRange(start,end);
+  results.insert(results.end(),quad.begin(),quad.end());
+
+  quad = searchRange(start,end);
+  results.insert(results.end(),quad.begin(),quad.end());
+
+  quad = searchRange(start,end);
+  results.insert(results.end(),quad.begin(),quad.end());
+
+  return results;
 }
 
 template <class U>

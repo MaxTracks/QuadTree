@@ -24,6 +24,8 @@ class quadtree
   friend std::ostream& operator<<(std::ostream &out,quadtree<U> &hp);
   
  private:
+  std::vector<std::pair<std::pair<double,double>,T> > searchRange(node<T> *nd,
+      std::pair<double,double> start,std::pair<double,double> end);
   bool collision(node<T> *nd,std::pair<double,double> location);
   void split(node<T> *nd);
   void inOrder(node<T> *nd);
