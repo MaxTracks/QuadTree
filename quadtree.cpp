@@ -23,10 +23,10 @@ void quadtree<T>::insert(node<T> *tmp, std::pair<double,double> location,T item)
     data.second = item;
     nn->objects.push_back(data);
 
-    nn->x.first = std::numeric_limits<double>::lowest();
-    nn->x.second = std::numeric_limits<double>::max();
-    nn->y.first = std::numeric_limits<double>::lowest();
-    nn->y.second = std::numeric_limits<double>::max();
+    nn->x.first = xrange.first;
+    nn->x.second = xrange.second;
+    nn->y.first = yrange.first;
+    nn->y.second = yrange.second;
 
     root = nn;
 	}
@@ -203,26 +203,6 @@ template <class T>
 std::vector<std::pair<std::pair<double,double>,T> > quadtree<T>::searchRange(node<T> *nd,
     std::pair<double,double> start,std::pair<double,double> end)
 {
-  /*
-       public void query2D(Interval2D<Key> rect) {
-        query2D(root, rect);
-       }
-
-       private void query2D(Node h, Interval2D<Key> rect) {
-         if (h == null) return;
-         Key xmin = rect.intervalX.low;
-         Key ymin = rect.intervalY.low;
-         Key xmax = rect.intervalX.high;
-         Key ymax = rect.intervalY.high;
-         if (rect.contains(h.x, h.y))
-           System.out.println("    (" + h.x + ", " + h.y + ") " + h.value);
-         if ( less(xmin, h.x) &&  less(ymin, h.y)) query2D(h.SW, rect);
-         if ( less(xmin, h.x) && !less(ymax, h.y)) query2D(h.NW, rect);
-         if (!less(xmax, h.x) &&  less(ymin, h.y)) query2D(h.SE, rect);
-         if (!less(xmax, h.x) && !less(ymax, h.y)) query2D(h.NE, rect);
-       }
-  */
-
   std::vector<std::pair<std::pair<double,double>, T> > results;
   std::vector<std::pair<std::pair<double,double>, T> > quad;
  

@@ -12,7 +12,7 @@ template <class T>
 class quadtree
 {
  public:
-  quadtree(unsigned int bukkitSize = 1):bucketSize(bukkitSize),root(nullptr){};
+  quadtree(unsigned int bukkitSize = 1,double xstart = std::numeric_limits<double>::lowest(), double xend = std::numeric_limits<double>::max(), double ystart = std::numeric_limits<double>::lowest(), double yend = std::numeric_limits<double>::max()):bucketSize(bukkitSize),root(nullptr),xrange(xstart,xend),yrange(ystart,yend){};
   ~quadtree();
   void destroy(node<T>* nd);
   void inOrder();
@@ -31,6 +31,8 @@ class quadtree
   void inOrder(node<T> *nd);
   void insert(node<T> *tmp, std::pair<double,double> location, T item);
 
+  std::pair<double,double> xrange;
+  std::pair<double,double> yrange;
   unsigned int bucketSize;
   node<T> *root;
 };
