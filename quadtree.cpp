@@ -152,42 +152,44 @@ bool quadtree<T>::deleteKey(std::pair<double,double> xy)
 {
   if(root == nullptr) return false;
   node<T> *tmp = root;
-
-  if(tmp->first != nullptr)
-  {
-    if(xy.first <= ((tmp->x.first + tmp->x.second)/2.0))
-    {
-      if(xy.second <= ((tmp->y.first + tmp->y.second)/2.0))
-      {
-        tmp = tmp->first;
-      }
-      else
-      {
-        tmp = tmp->third;
-      }
-    }
-    else
-    {
-      if(xy.second <= ((tmp->y.first + tmp->y.second)/2.0))
-      {
-        tmp = tmp->second;
-      }
-      else
-      {
-        tmp = tmp->fourth;
-      }
-    }
-  } else {
-    for(int i=0;i<tmp->objects.size();i++)
-    {
-      if(tmp->objects[i].first == xy) 
-      {
-        tmp->objects.erase(tmp->objects.begin() + i);
-        return true;
-      }
-    }
-  }
-
+	
+	while(1)
+	{
+	  if(tmp->first != nullptr)
+	  {
+    	if(xy.first <= ((tmp->x.first + tmp->x.second)/2.0))
+    	{
+    	  if(xy.second <= ((tmp->y.first + tmp->y.second)/2.0))
+    	  {
+    	    tmp = tmp->first;
+    	  }
+    	  else
+    	  {	
+    	    tmp = tmp->third;
+    	  }
+    	}
+    	else
+    	{
+    	  if(xy.second <= ((tmp->y.first + tmp->y.second)/2.0))
+    	  {
+    	    tmp = tmp->second;
+    	  }
+    	  else
+    	  {
+    	    tmp = tmp->fourth;
+    	  }
+    	}
+  	} else {
+  	  for(int i=0;i<tmp->objects.size();i++)
+  	  {
+  	    if(tmp->objects[i].first == xy) 
+  	    {
+	        tmp->objects.erase(tmp->objects.begin() + 1);
+	        return true;
+	      }
+	    }
+	  }
+	}
   return false;
 }
 
