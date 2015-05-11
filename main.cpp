@@ -15,7 +15,7 @@ int main()
 
   quadtree<double> qt;
 	quadtree<double> del;
-		
+/*		
 	int j = 0, k = 99; 
 	while(j < 100)
 	{
@@ -45,6 +45,19 @@ int main()
 
 	std::vector<std::pair<std::pair<double,double>, double> > testVector;
 	testVector = del.searchRange(std::pair<double,double>(200.0, 200.0),std::pair<double,double>(150.0, 150.0));
+*/
+
+	del.insert(std::pair<double,double>(10.0, 10.0), 6.6);
+	del.insert(std::pair<double,double>(10.0, -10.0), 5.5);
+	del.insert(std::pair<double,double>(-10.0, 10.0), 4.4);
+	del.insert(std::pair<double,double>(-10.0, -10.0), 3.3);
+
+  std::vector<std::pair<std::pair<double,double>,double> > result = del.searchRange(std::pair<double,double>(-11.0,11.0),std::pair<double,double>(0.0,-11.0));
+
+  for(auto i:result){
+    std::cout << i.second << std::endl;
+  }
+  //std::cout << del;
 
   return 0;
 }
