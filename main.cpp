@@ -52,12 +52,14 @@ int main()
 	del.insert(std::pair<double,double>(-10.0, 10.0), 4.4);
 	del.insert(std::pair<double,double>(-10.0, -10.0), 3.3);
 
-  std::vector<std::pair<std::pair<double,double>,double> > result = del.searchRange(std::pair<double,double>(-11.0,11.0),std::pair<double,double>(0.0,-11.0));
+  std::vector<std::pair<std::pair<double,double>,double> > result;
+  result = del.searchRange(std::pair<double,double>(0.0,0.0),std::pair<double,double>(20.0,-100.0));
+
+  std::cout << result.size() << std::endl;
 
   for(auto i:result){
-    std::cout << i.second << std::endl;
+    std::cout << "X:" << i.first.first  << " Y:" << i.first.second << " DATA:" << i.second << std::endl;
   }
-  //std::cout << del;
 
   return 0;
 }

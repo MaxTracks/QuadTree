@@ -210,35 +210,47 @@ std::vector<std::pair<std::pair<double,double>,T> > quadtree<T>::searchRange(nod
 
   if(nd->first != nullptr)
   {
-    if(nd->first->x.first < end.first && nd->first->x.second < start.first 
-        && nd->first->y.first < end.second && nd->first->y.second < start.second)
-    {
-      quad = searchRange(start,end);
-      results.insert(results.end(),quad.begin(),quad.end());
-    }
+     std::pair<double,double> q1start(nd->first->x.first,nd->first->y.first);
+     std::pair<double,double> q1end(nd->first->x.second,nd->first->y.second);
 
-    if(nd->second->x.first < end.first && nd->second->x.second < start.first 
-        && nd->second->y.first < end.second && nd->second->y.second < start.second)
-    {
-      quad = searchRange(start,end);
-      results.insert(results.end(),quad.begin(),quad.end());
-    }
+     std::pair<double,double> q2start(nd->second->x.first,nd->second->y.first);
+     std::pair<double,double> q2end(nd->second->x.second,nd->second->y.second);
 
-    if(nd->third->x.first < end.first && nd->third->x.second < start.first 
-        && nd->third->y.first < end.second && nd->third->y.second < start.second)
-    {
-      quad = searchRange(start,end);
-      results.insert(results.end(),quad.begin(),quad.end());
-    }
+     std::pair<double,double> q3start(nd->third->x.first,nd->third->y.first);
+     std::pair<double,double> q3end(nd->third->x.second,nd->third->y.second);
 
-    if(nd->fourth->x.first < end.first && nd->fourth->x.second < start.first 
-        && nd->fourth->y.first < end.second && nd->fourth->y.second < start.second)
-    {
-      quad = searchRange(start,end);
-      results.insert(results.end(),quad.begin(),quad.end());
-    }
-  } else {
-   return nd->objects; 
+     std::pair<double,double> q4start(nd->fourth->x.first,nd->fourth->y.first);
+     std::pair<double,double> q4end(nd->fourth->x.second,nd->fourth->y.second);
+
+     if(overlapRect(q1start,q1end,start,end))
+      {
+        quad = searchRange(nd->first,start,end);
+        results.insert(results.end(),quad.begin(),quad.end());
+      }
+
+      if(overlapRect(q2start,q2end,start,end))
+      {
+        quad = searchRange(nd->second,start,end);
+        results.insert(results.end(),quad.begin(),quad.end());
+      }
+
+      if(overlapRect(q3start,q3end,start,end))
+      {
+        quad = searchRange(nd->third,start,end);
+        results.insert(results.end(),quad.begin(),quad.end());
+      }
+
+      if(overlapRect(q4start,q4end,start,end))
+      {
+        quad = searchRange(nd->fourth,start,end);
+        results.insert(results.end(),quad.begin(),quad.end());
+      }
+    } else {
+      for(auto i:nd->objects)
+      {
+        if(i.first.first < end.first && i.first.first > start.first && i.first.second > end.second && i.first.second < start.second)
+          results.push_back(i);
+      }
   }
 
   return results;
@@ -261,4 +273,13 @@ bool quadtree<T>::collision(node<T> *nd,std::pair<double,double> location)
       return true;
   }
   return false;
+}
+
+template <class T>
+bool quadtree<T>::overlapRect(std::pair<double,double> p1,std::pair<double,double> p2, 
+             std::pair<double,double> p3, std::pair<double,double> p4)
+{
+  if(p1.first > p4.first || p3.first > p2.first) return false;
+  if(p1.second < p4.second || p3.second < p2.second) return false;
+  return true;
 }
