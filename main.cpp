@@ -14,46 +14,19 @@ int main()
 	}
 
   quadtree<double> qt;
-	quadtree<double> del;
-/*		
-	int j = 0, k = 99; 
-	while(j < 100)
-	{
-		qt.insert(std::pair<double,double>(vec[j],vec[k]),((j+1.0) + ((j+1.0)/10)+vec[j]));
-		j++;
-		k--;
-	}
+	quadtree<double> del(1,0,500,500,0);
 
-	std::cout << qt << std::endl; 
-
-	del.insert(std::pair<double,double>(157.0, 139.0), 1.1);
-	del.insert(std::pair<double,double>(-234.0, -111.0), 2.2);
-	del.insert(std::pair<double,double>(-132.2, 193.0), 3.3);
-	del.insert(std::pair<double,double>(-111.0, -56.0), 4.4);
-	del.insert(std::pair<double,double>(152.0, 140.0), 5.5);
-	del.insert(std::pair<double,double>(160.0, 160.0), 6.6);
-	del.insert(std::pair<double,double>(157.0, 173.0), 7.7);
-	del.insert(std::pair<double,double>(157.0, 174.0), 8.8);
-	
-	std::cout << del << std::endl;
-
-	std::pair<double,double> xy = std::make_pair(-234.0, -111.0);
-
-	std::cout << del.deleteKey(xy) << std::endl;
-
-	std::cout << del << std::endl;
-
-	std::vector<std::pair<std::pair<double,double>, double> > testVector;
-	testVector = del.searchRange(std::pair<double,double>(200.0, 200.0),std::pair<double,double>(150.0, 150.0));
-*/
-
-	del.insert(std::pair<double,double>(10.0, 10.0), 6.6);
-	del.insert(std::pair<double,double>(10.0, -10.0), 5.5);
-	del.insert(std::pair<double,double>(-10.0, 10.0), 4.4);
-	del.insert(std::pair<double,double>(-10.0, -10.0), 3.3);
+	del.insert(std::pair<double,double>(10.0, 15.0), 6.6);
+  std::cout << "del.insert(std::pair<double,double>(10.0, 15.0), 6.6);" << std::endl;
+	del.insert(std::pair<double,double>(15.0, 10.0), 5.5);
+  std::cout << "del.insert(std::pair<double,double>(15.0, 10.0), 5.5);" << std::endl;
+	del.insert(std::pair<double,double>(10.0, 10.0), 4.4);
+  std::cout << "del.insert(std::pair<double,double>(10.0, 10.0), 4.4);" << std::endl;
+	del.insert(std::pair<double,double>(5.0, 5.0), 3.3);
+  std::cout << "del.insert(std::pair<double,double>(5.0, 5.0), 3.3);" << std::endl;
 
   std::vector<std::pair<std::pair<double,double>,double> > result;
-  result = del.searchRange(std::pair<double,double>(0.0,0.0),std::pair<double,double>(20.0,-100.0));
+  result = del.searchRange(std::pair<double,double>(0,500),std::pair<double,double>(500,0));
 
   std::cout << result.size() << std::endl;
 

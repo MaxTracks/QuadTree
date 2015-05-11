@@ -12,16 +12,17 @@ template <class T>
 class quadtree
 {
  public:
+    node<T>* getRoot(){return root;}
   quadtree(unsigned int bukkitSize = 1,double xstart = std::numeric_limits<double>::lowest(), 
     double xend = std::numeric_limits<double>::max(), 
     double ystart = std::numeric_limits<double>::max(), 
     double yend = std::numeric_limits<double>::lowest()):xrange(xstart,xend),
-    yrange(ystart,yend),bucketSize(bukkitSize),root(nullptr){};
+    yrange(ystart,yend),bucketSize(bukkitSize),root(nullptr){}
   ~quadtree();
   void destroy(node<T>* nd);
   void inOrder();
   void insert(std::pair<double,double> location,T item);
-   bool overlapRect(std::pair<double,double> p1,
+  bool overlapRect(std::pair<double,double> p1,
                std::pair<double,double> p2, 
                std::pair<double,double> p3, 
                std::pair<double,double> p4);

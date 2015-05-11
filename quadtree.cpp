@@ -51,7 +51,7 @@ void quadtree<T>::insert(node<T> *tmp, std::pair<double,double> location,T item)
       } else {
         if(location.first <= ((tmp->x.first + tmp->x.second)/2.0))
         {
-          if(location.second <= ((tmp->y.first + tmp->y.second)/2.0))
+          if(location.second > ((tmp->y.first + tmp->y.second)/2.0))
           {
             tmp = tmp->first;
           }
@@ -62,7 +62,7 @@ void quadtree<T>::insert(node<T> *tmp, std::pair<double,double> location,T item)
         }
         else
         {
-          if(location.second <= ((tmp->y.first + tmp->y.second)/2.0))
+          if(location.second > ((tmp->y.first + tmp->y.second)/2.0))
           {
             tmp = tmp->second;
           }
@@ -73,7 +73,7 @@ void quadtree<T>::insert(node<T> *tmp, std::pair<double,double> location,T item)
         }
       }    
     }
-	}
+    }
 }
 
 template <class T>
@@ -94,13 +94,13 @@ void quadtree<T>::split(node<T> *nd)
   nd->second->y.first = nd->y.first;
   nd->second->y.second = (nd->y.second + nd->y.first)/2.0;
 
-  nd->third->x.second = nd->x.first;
-  nd->third->x.first = (nd->x.second + nd->x.first)/2.0;
+  nd->third->x.first = nd->x.first;
+  nd->third->x.second = (nd->x.second + nd->x.first)/2.0;
   nd->third->y.first = (nd->y.second + nd->y.first)/2.0;
   nd->third->y.second = nd->y.second;
 
-  nd->third->x.first = (nd->x.first + nd->x.second)/2.0;
-  nd->third->x.second = nd->x.second;
+  nd->fourth->x.first = (nd->x.first + nd->x.second)/2.0;
+  nd->fourth->x.second = nd->x.second;
   nd->fourth->y.first = (nd->y.second + nd->y.first)/2.0;
   nd->fourth->y.second = nd->y.second;
 
