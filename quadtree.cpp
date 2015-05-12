@@ -1,20 +1,31 @@
 #include "quadtree.h"
 
+/*
+ * Name:
+ * Description:
+ * Arguments:
+ * Modifies:
+ * Returns:
+ */
 template<class T>
 quadtree<T>::~quadtree()
 {
 	if(root != nullptr) destroy(root);
 }
 
+/*
+ * Name: insert
+ * Description: Add a given item at a specific location into the tree
+ *              while splitting if the number of objects in a node
+ *              exeeds the bucket size.
+ * Arguments:
+ * Modifies:
+ * Returns: void
+ */
 template <class T>
-void quadtree<T>::insert(std::pair<double,double> location,T item)
+void quadtree<T>::insert( std::pair<double,double> location, T item )
 {
-  insert(root,location,item);
-}
-
-template <class T>
-void quadtree<T>::insert(node<T> *tmp, std::pair<double,double> location,T item)
-{
+    node<T> *tmp = root;
 	if(root == nullptr)
 	{
     node<T> *nn = new node<T>();
@@ -76,6 +87,13 @@ void quadtree<T>::insert(node<T> *tmp, std::pair<double,double> location,T item)
     }
 }
 
+/*
+ * Name:
+ * Description:
+ * Arguments:
+ * Modifies:
+ * Returns:
+ */
 template <class T>
 void quadtree<T>::split(node<T> *nd)
 {
@@ -106,12 +124,19 @@ void quadtree<T>::split(node<T> *nd)
 
   for(auto i:nd->objects)
   {
-    insert(nd,i.first,i.second);
+    insert(i.first,i.second);
   }
 
   nd->objects.clear();
 }
 
+/*
+ * Name:
+ * Description:
+ * Arguments:
+ * Modifies:
+ * Returns:
+ */
 template<class T>
 void quadtree<T>::destroy(node<T> *nd)
 {
@@ -125,12 +150,26 @@ void quadtree<T>::destroy(node<T> *nd)
 	}
 }
 
+/*
+ * Name:
+ * Description:
+ * Arguments:
+ * Modifies:
+ * Returns:
+ */
 template <class T>
 void quadtree<T>::inOrder()
 {
   inOrder(root);
 }
 
+/*
+ * Name:
+ * Description:
+ * Arguments:
+ * Modifies:
+ * Returns:
+ */
 template <class T>
 void quadtree<T>::inOrder(node<T> *nd)
 {
@@ -147,6 +186,13 @@ void quadtree<T>::inOrder(node<T> *nd)
   inOrder(nd->fourth);
 }
 
+/*
+ * Name:
+ * Description:
+ * Arguments:
+ * Modifies:
+ * Returns:
+ */
 template <class T>
 bool quadtree<T>::deleteKey(std::pair<double,double> xy)
 {
@@ -193,12 +239,26 @@ bool quadtree<T>::deleteKey(std::pair<double,double> xy)
   return false;
 }
 
+/*
+ * Name:
+ * Description:
+ * Arguments:
+ * Modifies:
+ * Returns:
+ */
 template <class T>
 std::vector<std::pair<std::pair<double,double>,T> > quadtree<T>::searchRange(std::pair<double,double> start,std::pair<double,double> end)
 {
   return searchRange(root,start,end);
 }
 
+/*
+ * Name:
+ * Description:
+ * Arguments:
+ * Modifies:
+ * Returns:
+ */
 template <class T>
 std::vector<std::pair<std::pair<double,double>,T> > quadtree<T>::searchRange(node<T> *nd,
     std::pair<double,double> start,std::pair<double,double> end)
@@ -256,6 +316,13 @@ std::vector<std::pair<std::pair<double,double>,T> > quadtree<T>::searchRange(nod
   return results;
 }
 
+/*
+ * Name:
+ * Description:
+ * Arguments:
+ * Modifies:
+ * Returns:
+ */
 template <class U>
 std::ostream& operator<<(std::ostream &out,quadtree<U> &qt)
 {
@@ -263,6 +330,13 @@ std::ostream& operator<<(std::ostream &out,quadtree<U> &qt)
   return out;
 }
 
+/*
+ * Name:
+ * Description:
+ * Arguments:
+ * Modifies:
+ * Returns:
+ */
 template <class T>
 bool quadtree<T>::collision(node<T> *nd,std::pair<double,double> location)
 {
@@ -275,6 +349,13 @@ bool quadtree<T>::collision(node<T> *nd,std::pair<double,double> location)
   return false;
 }
 
+/*
+ * Name:
+ * Description:
+ * Arguments:
+ * Modifies:
+ * Returns:
+ */
 template <class T>
 bool quadtree<T>::overlapRect(std::pair<double,double> p1,std::pair<double,double> p2, 
              std::pair<double,double> p3, std::pair<double,double> p4)
