@@ -159,7 +159,7 @@ bool quadtree<T>::deleteKey(std::pair<double,double> xy)
 	  {
     	if(xy.first <= ((tmp->x.first + tmp->x.second)/2.0))
     	{
-    	  if(xy.second <= ((tmp->y.first + tmp->y.second)/2.0))
+          if(xy.second > ((tmp->y.first + tmp->y.second)/2.0))
     	  {
     	    tmp = tmp->first;
     	  }
@@ -170,7 +170,7 @@ bool quadtree<T>::deleteKey(std::pair<double,double> xy)
     	}
     	else
     	{
-    	  if(xy.second <= ((tmp->y.first + tmp->y.second)/2.0))
+          if(xy.second > ((tmp->y.first + tmp->y.second)/2.0))
     	  {
     	    tmp = tmp->second;
     	  }

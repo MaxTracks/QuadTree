@@ -12,7 +12,7 @@ template <class T>
 class quadtree
 {
  public:
-    node<T>* getRoot(){return root;}
+  node<T>* getRoot(){return root;}
   quadtree(unsigned int bukkitSize = 1,double xstart = std::numeric_limits<double>::lowest(), 
     double xend = std::numeric_limits<double>::max(), 
     double ystart = std::numeric_limits<double>::max(), 
