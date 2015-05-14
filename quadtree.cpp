@@ -1,12 +1,5 @@
 #include "quadtree.h"
 
-/*
- * Name:
- * Description:
- * Arguments:
- * Modifies:
- * Returns:
- */
 template<class T>
 quadtree<T>::~quadtree()
 {
@@ -14,31 +7,76 @@ quadtree<T>::~quadtree()
 }
 
 /*
+ * Name: getSubQuad
+ * Description: Get the next lowest quadrent which a point is located.
+ * Arguments: current node, x/y location
+ * Modifies: none
+ * Returns: node<T>*
+ */
+template <class T>
+node<T>* quadtree<T>::getSubQuad(node<T> *nd,std::pair<double,double> location)
+{
+  if(location.first <= ((nd->x.first + nd->x.second)/2.0))
+  {
+    if(location.second > ((nd->y.first + nd->y.second)/2.0))
+      nd = nd->first;
+    else
+      nd = nd->third;
+  }
+  else
+  {
+    if(location.second > ((nd->y.first + nd->y.second)/2.0))
+      nd = nd->second;
+    else
+      nd = nd->fourth;
+  }
+  return nd;
+}
+
+/*
+ * Name: createNode
+ * Description: Create a node with a specified x, y range.
+ * Arguments: x first, x second, y first, y second
+ * Modifies: none
+ * Returns: node<T>*
+ */
+template <class T>
+node<T>* quadtree<T>::createNode(double xfirst, double xsecond, 
+                                 double yfirst, double ysecond)
+{
+  node<T> *nn = new node<T>();
+
+  nn->x.first = xfirst;
+  nn->x.second = xsecond;
+  nn->y.first = yfirst;
+  nn->y.second = ysecond;
+
+  return nn;
+}
+
+/*
  * Name: insert
  * Description: Add a given item at a specific location into the tree
  *              while splitting if the number of objects in a node
  *              exeeds the bucket size.
- * Arguments:
- * Modifies:
+ * Arguments: location (standard pair x,y), item 
+ * Modifies: root and the following nodes
  * Returns: void
  */
 template <class T>
 void quadtree<T>::insert( std::pair<double,double> location, T item )
 {
-    node<T> *tmp = root;
+  std::pair<std::pair<double,double>,T> data;
+  node<T> *tmp = root;
+
+  data.first = location;
+  data.second = item; 
+
 	if(root == nullptr)
 	{
-    node<T> *nn = new node<T>();
-    std::pair<std::pair<double,double>,T> data;
-    data.first = location;
-    data.second = item;
+    node<T> *nn = createNode(xrange.first, xrange.second, 
+                             yrange.first, yrange.second);
     nn->objects.push_back(data);
-
-    nn->x.first = xrange.first;
-    nn->x.second = xrange.second;
-    nn->y.first = yrange.first;
-    nn->y.second = yrange.second;
-
     root = nn;
 	}
 	else
@@ -49,78 +87,37 @@ void quadtree<T>::insert( std::pair<double,double> location, T item )
       {
         if(bucketSize == tmp->objects.size())
         {
-          if(collision(tmp,location))return;
+          if(collision(tmp,location))
+            return;
           split(tmp);
         } else {
-          std::pair<std::pair<double, double>, T> tmppair;
-          tmppair.first.first = location.first;
-          tmppair.first.second = location.second;
-          tmppair.second = item;
-          tmp->objects.push_back(tmppair);
+          tmp->objects.push_back(data);
           return;
         }
       } else {
-        if(location.first <= ((tmp->x.first + tmp->x.second)/2.0))
-        {
-          if(location.second > ((tmp->y.first + tmp->y.second)/2.0))
-          {
-            tmp = tmp->first;
-          }
-          else
-          {
-            tmp = tmp->third;
-          }
-        }
-        else
-        {
-          if(location.second > ((tmp->y.first + tmp->y.second)/2.0))
-          {
-            tmp = tmp->second;
-          }
-          else
-          {
-            tmp = tmp->fourth;
-          }
-        }
+        tmp = getSubQuad(tmp,location);
       }    
     }
     }
 }
 
 /*
- * Name:
- * Description:
- * Arguments:
- * Modifies:
- * Returns:
+ * Name: split
+ * Description: transforms a quad tree node into four quadrents
+ * Arguments: node pointer (nd)
+ * Modifies: node pointer (nd)
+ * Returns: void
  */
 template <class T>
 void quadtree<T>::split(node<T> *nd)
 {
-  nd->first = new node<T>();
-  nd->second = new node<T>();
-  nd->third = new node<T>();
-  nd->fourth = new node<T>();
+  double xmid = (nd->x.second + nd->x.first) / 2.0;
+  double ymid = (nd->y.second + nd->y.first) / 2.0;
 
-  nd->first->x.first = nd->x.first;
-  nd->first->x.second = (nd->x.second + nd->x.first)/2.0;
-  nd->first->y.first = nd->y.first;
-  nd->first->y.second = (nd->y.second + nd->y.first)/2.0;
-
-  nd->second->x.first = (nd->x.second + nd->x.first)/2.0;
-  nd->second->x.second = nd->x.second;
-  nd->second->y.first = nd->y.first;
-  nd->second->y.second = (nd->y.second + nd->y.first)/2.0;
-
-  nd->third->x.first = nd->x.first;
-  nd->third->x.second = (nd->x.second + nd->x.first)/2.0;
-  nd->third->y.first = (nd->y.second + nd->y.first)/2.0;
-  nd->third->y.second = nd->y.second;
-
-  nd->fourth->x.first = (nd->x.first + nd->x.second)/2.0;
-  nd->fourth->x.second = nd->x.second;
-  nd->fourth->y.first = (nd->y.second + nd->y.first)/2.0;
-  nd->fourth->y.second = nd->y.second;
+  nd->first = createNode(nd->x.first,xmid,nd->y.first,ymid);
+  nd->second = createNode(xmid,nd->x.second,nd->y.first,ymid);
+  nd->third = createNode(nd->x.first,xmid,ymid,nd->y.second);
+  nd->fourth = createNode(xmid,nd->x.second,ymid,nd->y.second);
 
   for(auto i:nd->objects)
   {
@@ -131,11 +128,11 @@ void quadtree<T>::split(node<T> *nd)
 }
 
 /*
- * Name:
- * Description:
- * Arguments:
- * Modifies:
- * Returns:
+ * Name: destroy
+ * Description: Recursively delete all sub nodes including the given node.
+ * Arguments: node<T>*
+ * Modifies: nd and all sub nodes
+ * Returns: void
  */
 template<class T>
 void quadtree<T>::destroy(node<T> *nd)
@@ -151,11 +148,11 @@ void quadtree<T>::destroy(node<T> *nd)
 }
 
 /*
- * Name:
- * Description:
- * Arguments:
- * Modifies:
- * Returns:
+ * Name: inOrder
+ * Description: Call the recursive inOrder function.
+ * Arguments: none
+ * Modifies: none
+ * Returns: void
  */
 template <class T>
 void quadtree<T>::inOrder()
@@ -164,11 +161,12 @@ void quadtree<T>::inOrder()
 }
 
 /*
- * Name:
- * Description:
- * Arguments:
- * Modifies:
- * Returns:
+ * Name: inOrder
+ * Description: Outputs each object and then all sub quadrents 
+ *              objects recursively.
+ * Arguments: node<T>*
+ * Modifies: none
+ * Returns: void
  */
 template <class T>
 void quadtree<T>::inOrder(node<T> *nd)
@@ -177,7 +175,8 @@ void quadtree<T>::inOrder(node<T> *nd)
 
   for(auto i:nd->objects)
   {
-    std::cout << i.second << std::endl;
+    std::cout << "X:" << i.first.first << " Y:" << i.first.second 
+      << " -(object)- " << i.second << std::endl;
   }
 
   inOrder(nd->first);
@@ -187,11 +186,13 @@ void quadtree<T>::inOrder(node<T> *nd)
 }
 
 /*
- * Name:
- * Description:
- * Arguments:
- * Modifies:
- * Returns:
+ * Name: deleteKey
+ * Description: Deletes an object at a given location. if the object is 
+ *              successfuly deleted, true is returned, otherwise false 
+ *              is returned.
+ * Arguments: x/y coordinates to remove objects from.
+ * Modifies: object at xy
+ * Returns: bool
  */
 template <class T>
 bool quadtree<T>::deleteKey(std::pair<double,double> xy)
@@ -203,28 +204,7 @@ bool quadtree<T>::deleteKey(std::pair<double,double> xy)
 	{
 	  if(tmp->first != nullptr)
 	  {
-    	if(xy.first <= ((tmp->x.first + tmp->x.second)/2.0))
-    	{
-          if(xy.second > ((tmp->y.first + tmp->y.second)/2.0))
-    	  {
-    	    tmp = tmp->first;
-    	  }
-    	  else
-    	  {	
-    	    tmp = tmp->third;
-    	  }
-    	}
-    	else
-    	{
-          if(xy.second > ((tmp->y.first + tmp->y.second)/2.0))
-    	  {
-    	    tmp = tmp->second;
-    	  }
-    	  else
-    	  {
-    	    tmp = tmp->fourth;
-    	  }
-    	}
+      tmp = getSubQuad(tmp,xy);
   	} else {
   	  for(int i=0;i<tmp->objects.size();i++)
   	  {
@@ -240,11 +220,11 @@ bool quadtree<T>::deleteKey(std::pair<double,double> xy)
 }
 
 /*
- * Name:
- * Description:
- * Arguments:
- * Modifies:
- * Returns:
+ * Name: searchRange
+ * Description: Call the recursive searchRange function.
+ * Arguments: start point, end point
+ * Modifies: none
+ * Returns: vector of pairs of objects and their x/y location
  */
 template <class T>
 std::vector<std::pair<std::pair<double,double>,T> > quadtree<T>::searchRange(std::pair<double,double> start,std::pair<double,double> end)
@@ -253,11 +233,12 @@ std::vector<std::pair<std::pair<double,double>,T> > quadtree<T>::searchRange(std
 }
 
 /*
- * Name:
- * Description:
- * Arguments:
- * Modifies:
- * Returns:
+ * Name: searchRange
+ * Description: Recursively search all quadrents within the search range 
+ *              and return all objects found within range.
+ * Arguments: node, start point, end point
+ * Modifies: none
+ * Returns: vector of pairs of objects and their x/y location
  */
 template <class T>
 std::vector<std::pair<std::pair<double,double>,T> > quadtree<T>::searchRange(node<T> *nd,
@@ -317,25 +298,11 @@ std::vector<std::pair<std::pair<double,double>,T> > quadtree<T>::searchRange(nod
 }
 
 /*
- * Name:
- * Description:
- * Arguments:
- * Modifies:
- * Returns:
- */
-template <class U>
-std::ostream& operator<<(std::ostream &out,quadtree<U> &qt)
-{
-  qt.inOrder();
-  return out;
-}
-
-/*
- * Name:
- * Description:
- * Arguments:
- * Modifies:
- * Returns:
+ * Name: collision
+ * Description: Detect a collision between two points.
+ * Arguments: node, location
+ * Modifies: none
+ * Returns: bool
  */
 template <class T>
 bool quadtree<T>::collision(node<T> *nd,std::pair<double,double> location)
@@ -349,12 +316,12 @@ bool quadtree<T>::collision(node<T> *nd,std::pair<double,double> location)
   return false;
 }
 
-/*
- * Name:
- * Description:
- * Arguments:
- * Modifies:
- * Returns:
+/* 
+ * Name: overlapRect
+ * Description: Determine if two rectangles overlap
+ * Arguments: upper left and lower right point for each square.
+ * Modifies: none
+ * Returns: bool
  */
 template <class T>
 bool quadtree<T>::overlapRect(std::pair<double,double> p1,std::pair<double,double> p2, 
@@ -364,3 +331,12 @@ bool quadtree<T>::overlapRect(std::pair<double,double> p1,std::pair<double,doubl
   if(p1.second < p4.second || p3.second < p2.second) return false;
   return true;
 }
+
+template <class U>
+std::ostream& operator<<(std::ostream &out,quadtree<U> &qt)
+{
+  qt.inOrder();
+  return out;
+}
+
+

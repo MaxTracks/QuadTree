@@ -15,7 +15,13 @@ int main()
 
   quadtree<double> qt;
 	quadtree<double> del(1,0,500,500,0);
+  
+  for(unsigned int i=0;i<vec.size();i+=2)
+  {
+    qt.insert(std::pair<double,double>(vec[i],vec[i+1]),1.0);
+  }
 
+  std::cout << qt << std::endl;
 	del.insert(std::pair<double,double>(10.0, 15.0), 6.6);
   std::cout << "del.insert(std::pair<double,double>(10.0, 15.0), 6.6);" << std::endl;
 	del.insert(std::pair<double,double>(15.0, 10.0), 5.5);
@@ -25,6 +31,8 @@ int main()
 	del.insert(std::pair<double,double>(5.0, 5.0), 3.3);
   std::cout << "del.insert(std::pair<double,double>(5.0, 5.0), 3.3);" << std::endl;
 
+	del.deleteKey(std::pair<double,double>(5.0, 5.0));
+
   std::vector<std::pair<std::pair<double,double>,double> > result;
   result = del.searchRange(std::pair<double,double>(0,500),std::pair<double,double>(500,0));
 
@@ -33,6 +41,5 @@ int main()
   for(auto i:result){
     std::cout << "X:" << i.first.first  << " Y:" << i.first.second << " DATA:" << i.second << std::endl;
   }
-
   return 0;
 }

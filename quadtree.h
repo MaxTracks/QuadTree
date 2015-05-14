@@ -71,6 +71,12 @@ public:
     friend std::ostream& operator<<( std::ostream &out,quadtree<U> &hp);
 
 private:
+    /* getSubQuad - get the next lowest quadrent where an object is located */
+    node<T>* getSubQuad(node<T> *nd,std::pair<double,double> location);
+
+    /* createNode - create a new node with given fields */
+    node<T>* createNode(double xfirst, double xsecond, double yfirst, double ysecond);
+
     /* inOrder - Output each node from the current node and lower */
     void inOrder( node<T> *nd );
 
