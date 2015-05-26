@@ -14,7 +14,7 @@ quadtree<T>::~quadtree()
  * Returns: node<T>*
  */
 template <class T>
-node<T>* quadtree<T>::getSubQuad(node<T> *nd,std::pair<double,double> location)
+node<T>* quadtree<T>::getSubQuad( node<T> *nd, cord location )
 {
   if(location.first <= ((nd->x.first + nd->x.second)/2.0))
   {
@@ -64,9 +64,9 @@ node<T>* quadtree<T>::createNode(double xfirst, double xsecond,
  * Returns: void
  */
 template <class T>
-void quadtree<T>::insert( std::pair<double,double> location, T item )
+void quadtree<T>::insert( cord location, T item )
 {
-  std::pair<std::pair<double,double>,T> data;
+  std::pair<cord,T> data;
   node<T> *tmp = root;
 
   data.first = location;
@@ -195,7 +195,7 @@ void quadtree<T>::inOrder(node<T> *nd)
  * Returns: bool
  */
 template <class T>
-bool quadtree<T>::deleteKey(std::pair<double,double> xy)
+bool quadtree<T>::deleteKey( cord xy )
 {
   if(root == nullptr) return false;
   node<T> *tmp = root;
@@ -227,7 +227,7 @@ bool quadtree<T>::deleteKey(std::pair<double,double> xy)
  * Returns: vector of pairs of objects and their x/y location
  */
 template <class T>
-std::vector<std::pair<std::pair<double,double>,T> > quadtree<T>::searchRange(std::pair<double,double> start,std::pair<double,double> end)
+std::vector<std::pair<cord,T> > quadtree<T>::searchRange( cord start, cord end )
 {
   return searchRange(root,start,end);
 }
@@ -241,27 +241,27 @@ std::vector<std::pair<std::pair<double,double>,T> > quadtree<T>::searchRange(std
  * Returns: vector of pairs of objects and their x/y location
  */
 template <class T>
-std::vector<std::pair<std::pair<double,double>,T> > quadtree<T>::searchRange(node<T> *nd,
-    std::pair<double,double> start,std::pair<double,double> end)
+std::vector<std::pair<cord,T> > quadtree<T>::searchRange( 
+    node<T> *nd, cord start,cord end )
 {
-  std::vector<std::pair<std::pair<double,double>, T> > results;
-  std::vector<std::pair<std::pair<double,double>, T> > quad;
+  std::vector<std::pair<cord, T> > results;
+  std::vector<std::pair<cord, T> > quad;
  
   if(nd == nullptr) return results;
 
   if(nd->first != nullptr)
   {
-     std::pair<double,double> q1start(nd->first->x.first,nd->first->y.first);
-     std::pair<double,double> q1end(nd->first->x.second,nd->first->y.second);
+     cord q1start(nd->first->x.first,nd->first->y.first);
+     cord q1end(nd->first->x.second,nd->first->y.second);
 
-     std::pair<double,double> q2start(nd->second->x.first,nd->second->y.first);
-     std::pair<double,double> q2end(nd->second->x.second,nd->second->y.second);
+     cord q2start(nd->second->x.first,nd->second->y.first);
+     cord q2end(nd->second->x.second,nd->second->y.second);
 
-     std::pair<double,double> q3start(nd->third->x.first,nd->third->y.first);
-     std::pair<double,double> q3end(nd->third->x.second,nd->third->y.second);
+     cord q3start(nd->third->x.first,nd->third->y.first);
+     cord q3end(nd->third->x.second,nd->third->y.second);
 
-     std::pair<double,double> q4start(nd->fourth->x.first,nd->fourth->y.first);
-     std::pair<double,double> q4end(nd->fourth->x.second,nd->fourth->y.second);
+     cord q4start(nd->fourth->x.first,nd->fourth->y.first);
+     cord q4end(nd->fourth->x.second,nd->fourth->y.second);
 
      if(overlapRect(q1start,q1end,start,end))
       {
@@ -289,7 +289,8 @@ std::vector<std::pair<std::pair<double,double>,T> > quadtree<T>::searchRange(nod
     } else {
       for(auto i:nd->objects)
       {
-        if(i.first.first < end.first && i.first.first > start.first && i.first.second > end.second && i.first.second < start.second)
+        if(i.first.first < end.first && i.first.first > start.first 
+           && i.first.second > end.second && i.first.second < start.second)
           results.push_back(i);
       }
   }
@@ -305,7 +306,7 @@ std::vector<std::pair<std::pair<double,double>,T> > quadtree<T>::searchRange(nod
  * Returns: bool
  */
 template <class T>
-bool quadtree<T>::collision(node<T> *nd,std::pair<double,double> location)
+bool quadtree<T>::collision(node<T> *nd,cord location)
 {
   for(int i=0;i<nd->objects.size();i++)
   {
@@ -324,8 +325,7 @@ bool quadtree<T>::collision(node<T> *nd,std::pair<double,double> location)
  * Returns: bool
  */
 template <class T>
-bool quadtree<T>::overlapRect(std::pair<double,double> p1,std::pair<double,double> p2, 
-             std::pair<double,double> p3, std::pair<double,double> p4)
+bool quadtree<T>::overlapRect( cord p1, cord p2, cord p3, cord p4)
 {
   if(p1.first > p4.first || p3.first > p2.first) return false;
   if(p1.second < p4.second || p3.second < p2.second) return false;

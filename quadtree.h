@@ -17,6 +17,8 @@
 #include <limits>
 #include "node.h"
 
+typedef std::pair<double,double> cord;
+
 template <class T>
 class quadtree
 {
@@ -41,13 +43,13 @@ public:
     void inOrder( );
 
     /* insert - Insert an item into the tree at a given location */
-    void insert( std::pair<double,double> location, T item );
+    void insert( cord location, T item );
 
     /* deleteKey - Remove an object at a certain location */
-    bool deleteKey( std::pair<double,double> xy );
+    bool deleteKey( cord xy );
 
     /* collision - Check for a collision between objects */
-    bool collision( node<T> *nd, std::pair<double,double> location );
+    bool collision( node<T> *nd, cord location );
 
     /* split - split a node into four quadrents */
     void split( node<T> *nd );
@@ -56,15 +58,10 @@ public:
     node<T>* getRoot( ) { return root; }
 
     /* overlapRect - Determine if two rectangles overlap one another */
-    bool overlapRect( std::pair<double,double> p1, 
-                      std::pair<double,double> p2,
-                      std::pair<double,double> p3, 
-                      std::pair<double,double> p4 );
+    bool overlapRect( cord p1, cord p2, cord p3, cord p4 );
 
     /* searchRange - Return all objects within the range */
-    std::vector<std::pair<std::pair<double,double>,T> > searchRange(
-            std::pair<double,double> start,
-            std::pair<double,double> end );
+    std::vector<std::pair<cord,T> > searchRange( cord start, cord end );
 
     /* Overload the output operator to call inOrder */
     template <class U>
@@ -72,23 +69,22 @@ public:
 
 private:
     /* getSubQuad - get the next lowest quadrent where an object is located */
-    node<T>* getSubQuad(node<T> *nd,std::pair<double,double> location);
+    node<T>* getSubQuad( node<T> *nd, cord location);
 
     /* createNode - create a new node with given fields */
-    node<T>* createNode(double xfirst, double xsecond, double yfirst, double ysecond);
+    node<T>* createNode( double xfirst, double xsecond,
+                         double yfirst, double ysecond );
 
     /* inOrder - Output each node from the current node and lower */
     void inOrder( node<T> *nd );
 
     /* searchRange - Recursively search each quadrent which overlaps the given
      *range for objects within the range */
-    std::vector<std::pair<std::pair<double,double>,T> > searchRange(
-            node<T> *nd,
-            std::pair<double,double> start,
-            std::pair<double,double> end );
+    std::vector<std::pair<cord,T> > searchRange( 
+        node<T> *nd, cord start, cord end );
 
-    std::pair<double,double> xrange;
-    std::pair<double,double> yrange;
+    cord xrange;
+    cord yrange;
     unsigned int bucketSize;
     node<T> *root;
 };
